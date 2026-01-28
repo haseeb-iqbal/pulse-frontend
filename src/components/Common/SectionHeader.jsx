@@ -1,5 +1,11 @@
 // Reusable section header with count badge for grouped data
 const SectionHeader = ({ title, count, color = "gray" }) => {
+  // Validate required props
+  if (!title || typeof title !== "string") return null;
+
+  // Safely handle count
+  const displayCount = Number.isFinite(Number(count)) ? count : 0;
+
   const colorClasses = {
     gray: { text: "text-gray-700", badge: "bg-gray-100 text-gray-700" },
     red: { text: "text-red-700", badge: "bg-red-100 text-red-700" },
@@ -17,7 +23,7 @@ const SectionHeader = ({ title, count, color = "gray" }) => {
       <span
         className={`px-3 py-1 ${colors.badge} rounded-full text-sm font-semibold`}
       >
-        {count}
+        {displayCount}
       </span>
     </div>
   );

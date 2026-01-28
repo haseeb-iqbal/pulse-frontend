@@ -22,18 +22,32 @@ const Alerts = () => {
     const fetchAlerts = async () => {
       try {
         setLoading(true);
-        const response = await getAlerts();
-        const alertsData = response?.data?.data || [];
+        setError(null);
 
+        const response = await getAlerts();
+        const alertsData = Array.isArray(response?.data?.data)
+          ? response.data.data
+          : [];
+
+        // Filter out invalid alerts (must have id, severity, and message)
+        const validAlerts = alertsData.filter(
+          (alert) =>
+            alert &&
+            typeof alert === "object" &&
+            alert.id &&
+            alert.severity &&
+            alert.message,
+        );
+
+        // Group by severity with validation
         const grouped = {
-          critical: alertsData.filter((a) => a.severity === "critical"),
-          high: alertsData.filter((a) => a.severity === "high"),
-          medium: alertsData.filter((a) => a.severity === "medium"),
-          low: alertsData.filter((a) => a.severity === "low"),
+          critical: validAlerts.filter((a) => a.severity === "critical"),
+          high: validAlerts.filter((a) => a.severity === "high"),
+          medium: validAlerts.filter((a) => a.severity === "medium"),
+          low: validAlerts.filter((a) => a.severity === "low"),
         };
 
         setAlertsByGroup(grouped);
-        setError(null);
       } catch (err) {
         setError(err.message || "Failed to fetch alerts");
         setAlertsByGroup({ critical: [], high: [], medium: [], low: [] });
