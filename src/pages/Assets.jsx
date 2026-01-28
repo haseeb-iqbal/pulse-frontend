@@ -14,25 +14,40 @@ const Assets = () => {
     const fetchAssets = async () => {
       try {
         setLoading(true);
+        setError(null);
+
         const [stocksResponse, cryptoResponse] = await Promise.all([
           getStocks(),
           getCrypto(),
         ]);
 
-        const stocks = stocksResponse?.data || [];
-        const crypto = cryptoResponse?.data || [];
+        // Validate and extract data
+        const stocks = Array.isArray(stocksResponse?.data)
+          ? stocksResponse.data
+          : [];
+        const crypto = Array.isArray(cryptoResponse?.data)
+          ? cryptoResponse.data
+          : [];
 
-        // Combine and add asset type
+        // Combine and add asset type with validation
         const combinedAssets = [
-          ...stocks.map((asset) => ({ ...asset, type: "stock" })),
-          ...crypto.map((asset) => ({ ...asset, type: "crypto" })),
+          ...stocks
+            .filter(
+              (asset) => asset && typeof asset === "object" && asset.symbol,
+            )
+            .map((asset) => ({ ...asset, type: "stock" })),
+          ...crypto
+            .filter(
+              (asset) => asset && typeof asset === "object" && asset.symbol,
+            )
+            .map((asset) => ({ ...asset, type: "crypto" })),
         ];
 
         setAssets(combinedAssets);
-        setError(null);
       } catch (err) {
         setError(err.message || "Failed to fetch assets");
         console.error("Assets fetch error:", err);
+        setAssets([]);
       } finally {
         setLoading(false);
       }

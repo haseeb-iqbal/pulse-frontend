@@ -15,19 +15,35 @@ const News = () => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const response = await getNews();
-        const newsData = response?.data?.data || [];
-        setNews(newsData);
+        setError(null);
 
-        // Extract unique categories
+        const response = await getNews();
+        const newsData = Array.isArray(response?.data?.data)
+          ? response.data.data
+          : [];
+
+        // Filter out invalid news items
+        const validNews = newsData.filter(
+          (item) =>
+            item && typeof item === "object" && item.title && item.summary,
+        );
+
+        setNews(validNews);
+
+        // Extract unique categories, filtering out null/undefined
         const uniqueCategories = [
-          ...new Set(newsData.map((item) => item.category)),
+          ...new Set(
+            validNews
+              .map((item) => item.category)
+              .filter((cat) => cat && typeof cat === "string"),
+          ),
         ];
         setCategories(uniqueCategories.sort());
-        setError(null);
       } catch (err) {
         setError(err.message || "Failed to fetch news");
         console.error("News fetch error:", err);
+        setNews([]);
+        setCategories([]);
       } finally {
         setLoading(false);
       }

@@ -19,14 +19,28 @@ const Portfolio = () => {
     const fetchPortfolio = async () => {
       try {
         setLoading(true);
+        setError(null);
+
         const response = await getPortfolio();
         const portfolioData = response?.data?.data;
 
-        if (portfolioData) {
-          setPortfolio(portfolioData);
-          setError(null);
+        // Validate portfolio data structure
+        if (portfolioData && typeof portfolioData === "object") {
+          // Ensure required fields exist
+          const hasRequiredFields =
+            portfolioData.totalValue !== undefined &&
+            portfolioData.totalChange !== undefined &&
+            Array.isArray(portfolioData.assets);
+
+          if (hasRequiredFields) {
+            setPortfolio(portfolioData);
+          } else {
+            setError("Invalid portfolio data structure");
+            setPortfolio(null);
+          }
         } else {
           setError("No portfolio data received");
+          setPortfolio(null);
         }
       } catch (err) {
         setError(err.message || "Failed to fetch portfolio data");

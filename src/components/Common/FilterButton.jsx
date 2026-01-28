@@ -2,10 +2,17 @@
 const FilterButton = ({
   label,
   count,
-  isActive,
+  isActive = false,
   onClick,
   showCount = true,
 }) => {
+  // Validate required props
+  if (!label || typeof label !== "string") return null;
+  if (typeof onClick !== "function") return null;
+
+  // Safely handle count value
+  const displayCount = Number.isFinite(Number(count)) ? count : 0;
+
   return (
     <button
       onClick={onClick}
@@ -16,7 +23,7 @@ const FilterButton = ({
       }`}
     >
       {label}
-      {showCount && count !== undefined && ` (${count})`}
+      {showCount && count !== undefined && ` (${displayCount})`}
     </button>
   );
 };

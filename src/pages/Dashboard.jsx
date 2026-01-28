@@ -15,16 +15,26 @@ const Dashboard = () => {
     const fetchPortfolioData = async () => {
       try {
         setLoading(true);
+        setError(null);
+
         const [portfolioResponse, dashboardResponse] = await Promise.all([
           getPortfolio(),
           getDashboard(),
         ]);
-        setPortfolioData(portfolioResponse?.data?.data);
-        setDashboardData(dashboardResponse?.data?.data);
-        setError(null);
+
+        // Validate responses
+        const portfolio = portfolioResponse?.data?.data;
+        const dashboard = dashboardResponse?.data?.data;
+
+        if (!portfolio && !dashboard) {
+          setError("No data available from server");
+        } else {
+          setPortfolioData(portfolio);
+          setDashboardData(dashboard);
+        }
       } catch (err) {
         setError(err.message || "Failed to fetch data");
-        console.error("Fetch error:", err);
+        console.error("Dashboard fetch error:", err);
       } finally {
         setLoading(false);
       }

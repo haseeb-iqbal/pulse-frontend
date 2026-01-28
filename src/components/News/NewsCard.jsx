@@ -3,6 +3,12 @@ import { getNewsCategoryColor } from "@utils/colors";
 import { capitalize } from "@utils/stringUtils";
 
 const NewsCard = ({ news }) => {
+  // Validate news object
+  if (!news || typeof news !== "object") return null;
+
+  // Validate required fields
+  if (!news.title || !news.summary) return null;
+
   const getImpactColor = (impact) => {
     const colors = {
       critical: "text-red-700 bg-red-50 border-red-200",
@@ -15,8 +21,10 @@ const NewsCard = ({ news }) => {
   };
 
   const getSentimentColor = (sentiment) => {
-    if (sentiment >= 0.7) return "text-green-600";
-    if (sentiment >= 0.5) return "text-yellow-600";
+    const num = Number(sentiment);
+    if (!Number.isFinite(num)) return "text-gray-600";
+    if (num >= 0.7) return "text-green-600";
+    if (num >= 0.5) return "text-yellow-600";
     return "text-red-600";
   };
 
@@ -42,11 +50,13 @@ const NewsCard = ({ news }) => {
         >
           {news.impact ? capitalize(news.impact) : "Unknown"}
         </span>
-        <span
-          className={`text-xs font-medium ${getSentimentColor(news.sentiment)}`}
-        >
-          Sentiment: {(news.sentiment * 100).toFixed(0)}%
-        </span>
+        {news.sentiment !== undefined && news.sentiment !== null && (
+          <span
+            className={`text-xs font-medium ${getSentimentColor(news.sentiment)}`}
+          >
+            Sentiment: {(Number(news.sentiment) * 100).toFixed(0)}%
+          </span>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 border-t pt-3">
