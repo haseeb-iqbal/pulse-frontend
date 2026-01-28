@@ -22,13 +22,19 @@ export const getNewsCategoryColor = (category) => {
 };
 
 export const getChangeColor = (change) => {
-  return change >= 0
+  const num = Number(change);
+  if (!Number.isFinite(num))
+    return COLOR_MAPPINGS.change.neutral || "text-gray-700";
+  return num >= 0
     ? COLOR_MAPPINGS.change.positive
     : COLOR_MAPPINGS.change.negative;
 };
 
 export const getChangeBgColor = (change) => {
-  return change >= 0
+  const num = Number(change);
+  if (!Number.isFinite(num))
+    return COLOR_MAPPINGS.changeBg.neutral || "bg-gray-50";
+  return num >= 0
     ? COLOR_MAPPINGS.changeBg.positive
     : COLOR_MAPPINGS.changeBg.negative;
 };

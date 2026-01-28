@@ -84,6 +84,7 @@ const PortfolioChart = ({ assets }) => {
             formatter={(value) => {
               const total = chartData.reduce((sum, d) => sum + d.value, 0);
               const item = chartData.find((d) => d.name === value);
+              if (!item) return value;
               const percent = ((item.value / total) * 100).toFixed(1);
               return `${value} - $${item.value.toFixed(0)} (${percent}%)`;
             }}

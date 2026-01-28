@@ -31,7 +31,7 @@ const ActiveAlertsSummary = ({ dashboardData }) => {
                 )}
                 <div className="flex items-center gap-3 flex-wrap">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold border ${getSeverityColor(alert.severity)}`}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold border ${getSeverityColor(alert.severity || "medium")}`}
                   >
                     {alert.severity
                       ? alert.severity.charAt(0).toUpperCase() +

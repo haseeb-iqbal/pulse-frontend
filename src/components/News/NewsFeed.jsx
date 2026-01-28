@@ -19,8 +19,8 @@ const NewsFeed = ({ news, loading, categories }) => {
 
   return (
     <div className="grid grid-cols-1 gap-6">
-      {news.map((newsItem) => (
-        <NewsCard key={newsItem.id} news={newsItem} />
+      {news.map((newsItem, index) => (
+        <NewsCard key={newsItem.id || `news-${index}`} news={newsItem} />
       ))}
     </div>
   );

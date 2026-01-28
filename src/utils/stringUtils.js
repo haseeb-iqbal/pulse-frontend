@@ -1,12 +1,12 @@
 // Utility to capitalize first letter
 export const capitalize = (str) => {
-  if (!str) return "";
+  if (!str || typeof str !== "string") return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 // Utility to convert snake_case or kebab-case to Title Case
 export const formatLabel = (str) => {
-  if (!str) return "";
+  if (!str || typeof str !== "string") return "";
   return str
     .split(/[_-]/)
     .map((word) => capitalize(word))
@@ -15,22 +15,25 @@ export const formatLabel = (str) => {
 
 // Utility to get abbreviation count
 export const getAbbreviatedCount = (count) => {
-  if (count >= 1000000) return (count / 1000000).toFixed(1) + "M";
-  if (count >= 1000) return (count / 1000).toFixed(1) + "K";
-  return count.toString();
+  const num = Number(count);
+  if (!Number.isFinite(num)) return "0";
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+  if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+  return num.toString();
 };
 
 // Utility to format volume
 export const formatVolume = (volume) => {
-  if (!volume) return "N/A";
-  if (volume >= 1000000000) {
-    return (volume / 1000000000).toFixed(2) + "B";
+  const num = Number(volume);
+  if (!Number.isFinite(num) || num === 0) return "N/A";
+  if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(2) + "B";
   }
-  if (volume >= 1000000) {
-    return (volume / 1000000).toFixed(2) + "M";
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(2) + "M";
   }
-  if (volume >= 1000) {
-    return (volume / 1000).toFixed(2) + "K";
+  if (num >= 1000) {
+    return (num / 1000).toFixed(2) + "K";
   }
-  return volume.toString();
+  return num.toString();
 };

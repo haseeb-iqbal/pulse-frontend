@@ -26,7 +26,7 @@ const RecentNewsFeed = ({ dashboardData }) => {
                 <p className="text-sm text-gray-600 mb-3">{news.summary}</p>
                 <div className="flex items-center gap-3 flex-wrap">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${getNewsCategoryColor(news.category)}`}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${getNewsCategoryColor(news.category || "default")}`}
                   >
                     {news.category
                       ? news.category.charAt(0).toUpperCase() +
