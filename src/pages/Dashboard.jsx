@@ -5,7 +5,7 @@ import TopGainersLosers from "@components/Dashboard/TopGainersLosers";
 import RecentNewsFeed from "@components/Dashboard/RecentNewsFeed";
 import ActiveAlertsSummary from "@components/Dashboard/ActiveAlertsSummary";
 
-const Portfolio = () => {
+const Dashboard = () => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,4 +64,4 @@ const Portfolio = () => {
   );
 };
 
-export default Portfolio;
+export default Dashboard;

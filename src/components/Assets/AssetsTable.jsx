@@ -1,21 +1,8 @@
 import { formatCurrency } from "@utils/formatting";
 import { getChangeColor, getChangeBgColor } from "@utils/colors";
+import { formatVolume } from "@utils/stringUtils";
 
 const AssetsTable = ({ assets, loading }) => {
-  const formatVolume = (volume) => {
-    if (!volume) return "N/A";
-    if (volume >= 1000000000) {
-      return (volume / 1000000000).toFixed(2) + "B";
-    }
-    if (volume >= 1000000) {
-      return (volume / 1000000).toFixed(2) + "M";
-    }
-    if (volume >= 1000) {
-      return (volume / 1000).toFixed(2) + "K";
-    }
-    return volume.toString();
-  };
-
   if (loading) {
     return (
       <div className="bg-white rounded-lg shadow p-6">

@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import Assets from './pages/Assets'
-import News from './pages/News'
-import Alerts from './pages/Alerts'
-import Portfolio from './pages/Portfolio'
-import Layout from './components/Layout'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Assets from "./pages/Assets";
+import News from "./pages/News";
+import Alerts from "./pages/Alerts";
+import Portfolio from "./pages/Portfolio";
+import Layout from "./components/Layout";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         </Routes>
       </Layout>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

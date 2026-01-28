@@ -3,6 +3,11 @@ import PortfolioOverview from "@components/Portfolio/PortfolioOverview";
 import PortfolioChart from "@components/Portfolio/PortfolioChart";
 import PortfolioAssetsTable from "@components/Portfolio/PortfolioAssetsTable";
 import WatchlistSection from "@components/Portfolio/WatchlistSection";
+import {
+  LoadingState,
+  ErrorState,
+  EmptyState,
+} from "@components/Common/StateComponents";
 import { getPortfolio } from "@services/api";
 
 const Portfolio = () => {
@@ -35,28 +40,15 @@ const Portfolio = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-gray-600">Loading portfolio...</div>
-      </div>
-    );
+    return <LoadingState message="Loading portfolio..." />;
   }
 
   if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-700">
-        <h2 className="text-lg font-semibold mb-2">Error Loading Portfolio</h2>
-        <p>{error}</p>
-      </div>
-    );
+    return <ErrorState error={error} title="Error Loading Portfolio" />;
   }
 
   if (!portfolio) {
-    return (
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-yellow-700">
-        <p>No portfolio data available</p>
-      </div>
-    );
+    return <EmptyState message="No portfolio data available" />;
   }
 
   return (

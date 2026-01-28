@@ -1,5 +1,6 @@
 import { formatTimestamp } from "@utils/formatting";
 import { getNewsCategoryColor } from "@utils/colors";
+import { capitalize } from "@utils/stringUtils";
 
 const NewsCard = ({ news }) => {
   const getImpactColor = (impact) => {
@@ -34,14 +35,12 @@ const NewsCard = ({ news }) => {
         <span
           className={`px-3 py-1 rounded-full text-xs font-semibold ${getNewsCategoryColor(news.category)}`}
         >
-          {news.category.charAt(0).toUpperCase() + news.category.slice(1)}
+          {capitalize(news.category)}
         </span>
         <span
           className={`px-3 py-1 rounded-full text-xs font-semibold border ${getImpactColor(news.impact)}`}
         >
-          {news.impact
-            ? news.impact.charAt(0).toUpperCase() + news.impact.slice(1)
-            : "Unknown"}
+          {news.impact ? capitalize(news.impact) : "Unknown"}
         </span>
         <span
           className={`text-xs font-medium ${getSentimentColor(news.sentiment)}`}

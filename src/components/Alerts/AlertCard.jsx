@@ -1,5 +1,6 @@
 import { formatTimestamp } from "@utils/formatting";
 import { getSeverityColor, getSeverityBorder } from "@utils/colors";
+import { capitalize, formatLabel } from "@utils/stringUtils";
 
 const AlertCard = ({ alert }) => {
   const getImpactColor = (impact) => {
@@ -10,13 +11,6 @@ const AlertCard = ({ alert }) => {
       default: "text-gray-700 bg-gray-50",
     };
     return colors[impact?.toLowerCase()] || colors.default;
-  };
-
-  const getTypeLabel = (type) => {
-    return type
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
   };
 
   return (
@@ -38,17 +32,15 @@ const AlertCard = ({ alert }) => {
         <span
           className={`px-3 py-1 rounded-full text-xs font-semibold border ${getSeverityColor(alert.severity)}`}
         >
-          {alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
+          {capitalize(alert.severity)}
         </span>
         <span
           className={`px-3 py-1 rounded-full text-xs font-semibold ${getImpactColor(alert.impact)}`}
         >
-          {alert.impact
-            ? alert.impact.charAt(0).toUpperCase() + alert.impact.slice(1)
-            : "Unknown"}
+          {alert.impact ? capitalize(alert.impact) : "Unknown"}
         </span>
         <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
-          {getTypeLabel(alert.type)}
+          {formatLabel(alert.type)}
         </span>
       </div>
 
