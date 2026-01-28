@@ -1,5 +1,5 @@
-import { formatTimestamp } from "../../utils/formatting";
-import { getSeverityColor, getSeverityBorder } from "../../utils/colors";
+import { formatTimestamp } from "@utils/formatting";
+import { getSeverityColor, getSeverityBorder } from "@utils/colors";
 
 const ActiveAlertsSummary = ({ dashboardData }) => {
   if (

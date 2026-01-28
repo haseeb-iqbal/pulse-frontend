@@ -1,5 +1,5 @@
-import { formatTimestamp } from "../../utils/formatting";
-import { getNewsCategoryColor } from "../../utils/colors";
+import { formatTimestamp } from "@utils/formatting";
+import { getNewsCategoryColor } from "@utils/colors";
 
 const RecentNewsFeed = ({ dashboardData }) => {
   if (

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { getPortfolio, getDashboard } from "../services/api";
-import PortfolioSummaryCard from "../components/Dashboard/PortfolioSummaryCard";
-import TopGainersLosers from "../components/Dashboard/TopGainersLosers";
-import RecentNewsFeed from "../components/Dashboard/RecentNewsFeed";
-import ActiveAlertsSummary from "../components/Dashboard/ActiveAlertsSummary";
+import { getPortfolio, getDashboard } from "@services/api";
+import PortfolioSummaryCard from "@components/Dashboard/PortfolioSummaryCard";
+import TopGainersLosers from "@components/Dashboard/TopGainersLosers";
+import RecentNewsFeed from "@components/Dashboard/RecentNewsFeed";
+import ActiveAlertsSummary from "@components/Dashboard/ActiveAlertsSummary";
 
 const Portfolio = () => {
   const [portfolioData, setPortfolioData] = useState(null);

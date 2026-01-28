@@ -1,4 +1,4 @@
-import { COLOR_MAPPINGS } from "./colorConstants";
+import { COLOR_MAPPINGS } from "@utils/colorConstants";
 
 export const getSeverityColor = (severity) => {
   return (

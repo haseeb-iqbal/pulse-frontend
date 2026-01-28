@@ -1,5 +1,5 @@
-import { formatCurrency } from "../utils/formatting";
-import { getChangeColor, getChangeBgColor } from "../utils/colors";
+import { formatCurrency } from "@utils/formatting";
+import { getChangeColor, getChangeBgColor } from "@utils/colors";
 
 const AssetRow = ({ asset }) => {
   if (!asset) return null;
