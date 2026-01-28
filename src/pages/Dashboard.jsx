@@ -1,116 +1,67 @@
-import { useEffect, useMemo, useState } from "react";
-import { getPortfolio } from "../services/api";
+import { useState, useEffect } from "react";
+import { getPortfolio, getDashboard } from "../services/api";
+import PortfolioSummaryCard from "../components/Dashboard/PortfolioSummaryCard";
+import TopGainersLosers from "../components/Dashboard/TopGainersLosers";
+import RecentNewsFeed from "../components/Dashboard/RecentNewsFeed";
+import ActiveAlertsSummary from "../components/Dashboard/ActiveAlertsSummary";
 
-const Dashboard = () => {
-  const [portfolio, setPortfolio] = useState(null);
+const Portfolio = () => {
+  const [portfolioData, setPortfolioData] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchPortfolio = async () => {
+    const fetchPortfolioData = async () => {
       try {
-        const response = await getPortfolio();
-        const data = response?.data?.data ?? null;
-        if (isMounted) {
-          setPortfolio(data);
-          setError("");
-        }
+        setLoading(true);
+        const [portfolioResponse, dashboardResponse] = await Promise.all([
+          getPortfolio(),
+          getDashboard(),
+        ]);
+        setPortfolioData(portfolioResponse?.data?.data);
+        setDashboardData(dashboardResponse?.data?.data);
+        setError(null);
       } catch (err) {
-        if (isMounted) {
-          setError("Unable to load portfolio summary right now.");
-        }
+        setError(err.message || "Failed to fetch data");
+        console.error("Fetch error:", err);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
-    fetchPortfolio();
-    return () => {
-      isMounted = false;
-    };
+    fetchPortfolioData();
   }, []);
-
-  const formatCurrency = useMemo(() => {
-    return (value, options = {}) => {
-      if (typeof value !== "number" || Number.isNaN(value)) return "—";
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 2,
-        ...options,
-      }).format(value);
-    };
-  }, []);
-
-  const formatPercent = useMemo(() => {
-    return (value, options = {}) => {
-      if (typeof value !== "number" || Number.isNaN(value)) return "—";
-      return new Intl.NumberFormat("en-US", {
-        style: "percent",
-        maximumFractionDigits: 2,
-        ...options,
-      }).format(value / 100);
-    };
-  }, []);
-
-  const totalValue = portfolio?.totalValue;
-  const totalChange = portfolio?.totalChange;
-  const totalChangePercent = portfolio?.totalChangePercent;
-  const isPositive = typeof totalChange === "number" ? totalChange >= 0 : true;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <span className="text-sm text-gray-500">Portfolio overview</span>
-      </div>
+    <div>
+      <h1 className="text-3xl font-bold mb-6">Portfolio</h1>
 
-      <section className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Portfolio Summary
-            </h2>
-            <p className="text-sm text-gray-500">
-              Total value and daily change
-            </p>
-          </div>
-          <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center text-xl">
-            💼
-          </div>
+      {loading && (
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-gray-600">Loading portfolio data...</p>
         </div>
+      )}
 
-        <div className="mt-6">
-          {loading ? (
-            <div className="animate-pulse space-y-3">
-              <div className="h-8 bg-gray-100 rounded w-56"></div>
-              <div className="h-5 bg-gray-100 rounded w-40"></div>
-            </div>
-          ) : error ? (
-            <div className="text-sm text-red-600">{error}</div>
-          ) : (
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-gray-900">
-                {formatCurrency(totalValue)}
-              </div>
-              <div
-                className={`text-sm font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}
-              >
-                {formatCurrency(totalChange, { signDisplay: "always" })}
-                <span className="ml-2">
-                  {formatPercent(totalChangePercent, { signDisplay: "always" })}
-                </span>
-              </div>
-            </div>
-          )}
+      {error && (
+        <div className="bg-red-50 p-6 rounded-lg shadow border border-red-200">
+          <p className="text-red-600">Error: {error}</p>
         </div>
-      </section>
+      )}
+
+      {!loading && !error && portfolioData && (
+        <PortfolioSummaryCard portfolioData={portfolioData} />
+      )}
+
+      {!loading && !error && dashboardData && (
+        <div className="mt-8">
+          <TopGainersLosers dashboardData={dashboardData} />
+          <RecentNewsFeed dashboardData={dashboardData} />
+          <ActiveAlertsSummary dashboardData={dashboardData} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default Dashboard;
+export default Portfolio;
