@@ -1,9 +1,14 @@
 import { formatCurrency } from "../../utils/formatting";
+import { getChangeColor, getChangeBgColor } from "../../utils/colors";
 
 const PortfolioSummaryCard = ({ portfolioData }) => {
-  const isPositive = portfolioData?.totalChange >= 0;
-  const changeColor = isPositive ? "text-green-600" : "text-red-600";
-  const changeBgColor = isPositive ? "bg-green-50" : "bg-red-50";
+  if (!portfolioData) {
+    return null;
+  }
+
+  const isPositive = portfolioData.totalChange >= 0;
+  const changeColor = getChangeColor(portfolioData.totalChange);
+  const changeBgColor = getChangeBgColor(portfolioData.totalChange);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow">

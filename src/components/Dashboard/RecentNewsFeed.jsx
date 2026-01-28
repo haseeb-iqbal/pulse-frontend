@@ -1,17 +1,14 @@
 import { formatTimestamp } from "../../utils/formatting";
+import { getNewsCategoryColor } from "../../utils/colors";
 
 const RecentNewsFeed = ({ dashboardData }) => {
-  const getCategoryColor = (category) => {
-    const colors = {
-      crypto: "bg-blue-100 text-blue-800",
-      market: "bg-purple-100 text-purple-800",
-      technology: "bg-indigo-100 text-indigo-800",
-      macro: "bg-orange-100 text-orange-800",
-      earnings: "bg-pink-100 text-pink-800",
-      default: "bg-gray-100 text-gray-800",
-    };
-    return colors[category] || colors.default;
-  };
+  if (
+    !dashboardData ||
+    !Array.isArray(dashboardData.recentNews) ||
+    dashboardData.recentNews.length === 0
+  ) {
+    return null;
+  }
 
   return (
     <div className="mt-8 bg-white rounded-lg shadow overflow-hidden">
@@ -19,33 +16,32 @@ const RecentNewsFeed = ({ dashboardData }) => {
         <h2 className="text-lg font-semibold text-blue-900">Recent News</h2>
       </div>
       <div className="divide-y divide-gray-200">
-        {Array.isArray(dashboardData?.recentNews) &&
-          dashboardData.recentNews.slice(0, 5).map((news) => (
-            <div key={news.id} className="p-6 hover:bg-gray-50 transition">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-2">
-                    {news.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3">{news.summary}</p>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(news.category)}`}
-                    >
-                      {news.category
-                        ? news.category.charAt(0).toUpperCase() +
-                          news.category.slice(1)
-                        : "Unknown"}
-                    </span>
-                    <span className="text-xs text-gray-500">{news.source}</span>
-                    <span className="text-xs text-gray-400">
-                      {formatTimestamp(news.timestamp)}
-                    </span>
-                  </div>
+        {dashboardData.recentNews.slice(0, 5).map((news) => (
+          <div key={news.id} className="p-6 hover:bg-gray-50 transition">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">
+                  {news.title}
+                </h3>
+                <p className="text-sm text-gray-600 mb-3">{news.summary}</p>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${getNewsCategoryColor(news.category)}`}
+                  >
+                    {news.category
+                      ? news.category.charAt(0).toUpperCase() +
+                        news.category.slice(1)
+                      : "Unknown"}
+                  </span>
+                  <span className="text-xs text-gray-500">{news.source}</span>
+                  <span className="text-xs text-gray-400">
+                    {formatTimestamp(news.timestamp)}
+                  </span>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
